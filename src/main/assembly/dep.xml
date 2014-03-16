@@ -1,0 +1,39 @@
+<assembly>
+  <id>bin</id>
+  <formats>
+    <format>tar.gz</format>
+  </formats>
+  <dependencySets>
+    <dependencySet>
+		  <!--
+		      Project artifact is not copied under library directory since
+		      it is added to the root directory of the zip package.
+		  -->
+		  <useProjectArtifact>false</useProjectArtifact>
+		  <unpack>false</unpack>
+		  <outputDirectory>lib/</outputDirectory>
+		  <scope>runtime</scope>
+		</dependencySet>
+  </dependencySets>
+  <fileSets>
+    <fileSet>
+      <directory>target</directory>
+      <outputDirectory>lib/</outputDirectory>
+      <includes>
+        <include>*.jar</include>
+        <include>*.xml</include>
+        <include>*.properties</include>
+      </includes>
+      <excludes>
+        <exclude>*.tar.gz</exclude>
+       </excludes>
+    </fileSet>
+		<fileSet>
+			<directory>${project.build.scriptSourceDirectory}</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>bin/*.sh</include>
+			</includes>
+		</fileSet>
+  </fileSets>
+</assembly>
