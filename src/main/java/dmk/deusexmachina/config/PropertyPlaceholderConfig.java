@@ -11,19 +11,13 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 @Configuration
-//@PropertySource("classpath:/deus-ex-machina.properties")
 public class PropertyPlaceholderConfig {
 	Logger logger = LoggerFactory.getLogger(PropertyPlaceholderConfig.class);
 
-//	@Bean
-//	public PropertySourcesPlaceholderConfigurer placeHolderConfigurer(){
-//		return new PropertySourcesPlaceholderConfigurer();
-//	}
-	
-	final Resource[] locations = { new ClassPathResource("deus-ex-machina.properties") };
+	final static Resource[] locations = { new ClassPathResource("deus-ex-machina.properties") };
 	
 	@Bean
-	public EnvironmentStringPBEConfig environmentStringPBEConfig(){
+	public static EnvironmentStringPBEConfig environmentStringPBEConfig(){
 		EnvironmentStringPBEConfig tmp =  new EnvironmentStringPBEConfig();
 		tmp.setAlgorithm("PBEWithMD5AndDES");
 		final String envName = "DEUSEXMACHINA_ENCRYPTION_PASSWORD";
@@ -36,22 +30,17 @@ public class PropertyPlaceholderConfig {
 	}
 	
 	@Bean
-	public StandardPBEStringEncryptor configurationEncryptor(){
+	public static StandardPBEStringEncryptor configurationEncryptor(){
 		StandardPBEStringEncryptor standardPBEStringEncryptor = new StandardPBEStringEncryptor();
 		standardPBEStringEncryptor.setConfig(environmentStringPBEConfig());
 		return standardPBEStringEncryptor;
 	}
 	
 	@Bean
-	public EncryptablePropertyPlaceholderConfigurer encryptablePropertyPlaceholderConfigurer(){
+	public static EncryptablePropertyPlaceholderConfigurer encryptablePropertyPlaceholderConfigurer(){
 		EncryptablePropertyPlaceholderConfigurer configurer =  new EncryptablePropertyPlaceholderConfigurer(configurationEncryptor());
 		configurer.setLocations(locations);
 		return configurer;
 	}
 	
-//	@Bean
-//	public StrongPasswordEncryptor strongPasswordEncryptor(){
-//		StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
-//		return passwordEncryptor;
-//	}
 }

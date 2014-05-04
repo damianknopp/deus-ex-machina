@@ -14,7 +14,7 @@ public class AntikytheraMechanismCLI {
 	
 	public static void main(final String args[]){
 		AntikytheraMechanismCLI cli = new AntikytheraMechanismCLI();
-		cli.runAntikytheraMechanism();
+		cli.runAntikytheraMechanism(args[0]);
 		System.exit(0);
 	}
 	
@@ -28,9 +28,13 @@ public class AntikytheraMechanismCLI {
 		          new AnnotationConfigApplicationContext(BootstrapConfig.class);
 	}
 	
-	public void runAntikytheraMechanism(){
+	public void runAntikytheraMechanism(final String type){
 		AntikytheraMechanism am = context.getBean(AntikytheraMechanism.class);
-		am.commencementOfTheDawn();
+		if("login".equalsIgnoreCase(type)){
+			am.commencementOfTheDawn();
+		}else if("trafficCheck".equalsIgnoreCase(type)){
+			am.trafficUpdatesWeekday();
+		}
 	}
 	
 }

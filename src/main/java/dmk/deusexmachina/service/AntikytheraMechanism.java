@@ -5,4 +5,7 @@ package dmk.deusexmachina.service;
  */
 public interface AntikytheraMechanism {
 	public void commencementOfTheDawn();
+	public void trafficUpdatesWeekend();
+	public void trafficUpdatesWeekday();
+
 }
