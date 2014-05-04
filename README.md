@@ -17,6 +17,7 @@ _mvn clean package assembly:single_
 Given the deus-ex-machina-bin.tar.gz
 * gzip -dc deus-ex-machina-bin.tar.gz | tar -xvf -
 * cd deus-ex-machina
+* edit the bin/run script and add the secret key used to encrypt your ENC properties
 * edit lib/deus-ex-machina.properties and add ENC properties
 
 
