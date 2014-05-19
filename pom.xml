@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>dmk</groupId>
 	<artifactId>deus-ex-machina</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<name>Deus Ex Machina</name>
 	<url>http://maven.apache.org</url>
 
@@ -58,7 +58,7 @@
 		<dependency>
 		  <groupId>dmk</groupId>
       <artifactId>dmk-twilio</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

@@ -7,5 +7,5 @@ public interface AntikytheraMechanism {
 	public void commencementOfTheDawn();
 	public void trafficUpdatesWeekend();
 	public void trafficUpdatesWeekday();
-
+	public void remindUsers();
 }

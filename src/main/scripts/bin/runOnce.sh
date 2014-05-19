@@ -8,5 +8,5 @@ do
   CP="$CP:$jar"
 done
 
-echo "java -cp $CP -DDEUSEXMACHINA_ENCRYPTION_PASSWORD=$DEUSEXMACHINA_ENCRYPTION_PASSWORD dmk.deusexmachina.cli.AntikytheraMechanismCLI"
-java -cp $CP -DDEUSEXMACHINA_ENCRYPTION_PASSWORD=$DEUSEXMACHINA_ENCRYPTION_PASSWORD dmk.deusexmachina.cli.AntikytheraMechanismCLI
+echo "java -cp $CP -DDEUSEXMACHINA_ENCRYPTION_PASSWORD=$DEUSEXMACHINA_ENCRYPTION_PASSWORD dmk.deusexmachina.cli.AntikytheraMechanismCLI $1"
+java -cp $CP -DDEUSEXMACHINA_ENCRYPTION_PASSWORD=$DEUSEXMACHINA_ENCRYPTION_PASSWORD dmk.deusexmachina.cli.AntikytheraMechanismCLI $1

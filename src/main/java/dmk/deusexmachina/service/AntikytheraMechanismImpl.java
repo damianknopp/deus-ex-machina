@@ -1,5 +1,7 @@
 package dmk.deusexmachina.service;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +17,8 @@ import dmk.mapquest.model.Filter;
 import dmk.mapquest.model.Incident;
 import dmk.mapquest.model.MapQuestTrafficResponse;
 import dmk.mapquest.service.MapQuestTrafficService;
-import dmk.twilio.sms.PhoneSmsService;
+import dmk.twilio.PhoneCallService;
+import dmk.twilio.PhoneSmsService;
 
 public class AntikytheraMechanismImpl implements AntikytheraMechanism {
 	Logger logger = LoggerFactory.getLogger(AntikytheraMechanismImpl.class);
@@ -28,9 +31,12 @@ public class AntikytheraMechanismImpl implements AntikytheraMechanism {
 	protected static final TrafficMessageNotificationFormatter trafficMessageFormatter = new TrafficMessageNotificationFormatter();
 	protected Boolean shouldEmail;
 	protected Boolean shouldSms;
+	protected Boolean shouldCall;
 	protected String smsTo;
 	protected String smsFrom;
+	protected String callUrlBase;
 	protected PhoneSmsService phoneSmsService;
+	protected PhoneCallService phoneCallService;
 
 	protected final String subject = "Deus Ex Machina";
 
@@ -48,7 +54,30 @@ public class AntikytheraMechanismImpl implements AntikytheraMechanism {
 		lookupTrafficInfo();
 	}
 
-	@Override
+//	@Scheduled(cron = "0 40 10 ? * MON-FRI")
+	public void remindUsers() {
+		final String html = portalLoginService.loginHomePage();
+		if(logger.isTraceEnabled()){
+			logger.trace(html);
+		}
+		String[] users = { "Damian Knopp" };
+//		String[] needCheckIn = portalLoginService.checkUsersStatus(html, users);
+		//TODO: remove this after testing
+		 String[] needCheckIn = users;
+		 for(String name: needCheckIn){
+			 try{
+				 final URL callUrl = new URL(callUrlBase + name.split("\\s+")[0]);
+				 logger.debug("calling " + name + " at " +
+						 smsTo + " from " + smsFrom + " to say " + callUrl.toString());
+				 // call to remind users to checkin
+				 phoneCallService.makeCall(smsTo, smsFrom, callUrl);
+			 }catch(MalformedURLException e){
+				 e.printStackTrace();
+				 throw new RuntimeException(e.getCause());
+			 }
+		 }
+	}
+	
 	@Scheduled(cron = "0 0 10 ? * MON-FRI")
 	public void commencementOfTheDawn() {
 		final String html = portalLoginService.loginHomePage();
@@ -163,6 +192,10 @@ public class AntikytheraMechanismImpl implements AntikytheraMechanism {
 		this.shouldSms = shouldSms;
 	}
 
+	public void setShouldCall(Boolean shouldCall) {
+		this.shouldCall = shouldCall;
+	}
+
 	public String getSmsTo() {
 		return smsTo;
 	}
@@ -179,6 +212,10 @@ public class AntikytheraMechanismImpl implements AntikytheraMechanism {
 		this.smsFrom = smsFrom;
 	}
 
+	public void setCallUrlBase(String urlBase){
+		this.callUrlBase = urlBase;
+	}
+	
 	public PhoneSmsService getPhoneSmsService() {
 		return phoneSmsService;
 	}
@@ -186,4 +223,9 @@ public class AntikytheraMechanismImpl implements AntikytheraMechanism {
 	public void setPhoneSmsService(PhoneSmsService phoneSmsService) {
 		this.phoneSmsService = phoneSmsService;
 	}
+	
+	public void setPhonCallService(PhoneCallService phoneCallService) {
+		this.phoneCallService = phoneCallService;
+	}
+
 }

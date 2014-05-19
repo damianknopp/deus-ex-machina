@@ -17,15 +17,16 @@ import dmk.mail.MailSenderService;
 import dmk.mail.MailSenderServiceDefaultImpl;
 import dmk.mapquest.conf.MapQuestConf;
 import dmk.mapquest.service.MapQuestTrafficService;
-import dmk.twilio.sms.PhoneSmsService;
-import dmk.twilio.sms.conf.TwilioSmsConf;
+import dmk.twilio.PhoneCallService;
+import dmk.twilio.PhoneSmsService;
+import dmk.twilio.conf.TwilioConf;
  
 @Configuration
 @Import({
 	PropertyPlaceholderConfig.class,
 	SchedulerConfig.class,
 	MapQuestConf.class,
-	TwilioSmsConf.class
+	TwilioConf.class
 })
 @ComponentScan(basePackages="dmk.deusexmachina")
 public class BootstrapConfig {
@@ -41,10 +42,14 @@ public class BootstrapConfig {
 	@Value("${dmk.service.portal.login.portalPass:defaultPass}")
 	protected String portalPass;
 	
-	@Value("${dmk.service.twilio.sms.authtoken}")
+	@Value("${dmk.service.twilio.authtoken}")
 	protected String authToken;
-	@Value("${dmk.service.twilio.sms.accountsid}")
+	@Value("${dmk.service.twilio.accountsid}")
 	protected String authSid;
+	@Value("${dmk.service.twilio.urlBase}")
+	protected String urlBase;
+	@Value("${dmk.antikytheramechanism.sms.from}")
+	protected String fromPhone;
 	
 	@Bean public String authToken(){
 		return this.authToken;
@@ -52,6 +57,14 @@ public class BootstrapConfig {
 	
 	@Bean public String accountSid(){
 		return this.authSid;
+	}
+	
+	@Bean public String urlBase(){
+		return this.urlBase;
+	}
+	
+	@Bean public String fromPhoneNumber(){
+		return this.fromPhone;
 	}
 	
 	@Value("${dmk.mapquest.host}")
@@ -73,6 +86,9 @@ public class BootstrapConfig {
 	protected Boolean sendEmail;
 	@Value("${dmk.antikytheramechanism.sms:false}")
 	protected Boolean sendSms;
+	@Value("${dmk.antikytheramechanism.call:false}")
+	protected Boolean sendCall;
+
 	
 	@Value("${dmk.antikytheramechanism.sms.to}")
 	protected String smsTo;
@@ -81,6 +97,9 @@ public class BootstrapConfig {
 	
 	@Autowired
 	public PhoneSmsService phoneSmsService;
+	@Autowired
+	public PhoneCallService phoneCallService;
+	
 	@Autowired
 	public MapQuestTrafficService mapQuestTrafficService;
 	
@@ -107,11 +126,14 @@ public class BootstrapConfig {
 		am.setPortalLoginService(this.portalLoginService());
 		am.setMapQuestTrafficService(mapQuestTrafficService);
 		am.setPhoneSmsService(phoneSmsService);
+		am.setPhonCallService(phoneCallService);
 		am.setEmailRecipient(this.emailRecipient);
 		am.setShouldEmail(this.sendEmail);
 		am.setShouldSms(this.sendSms);
+		am.setShouldCall(this.sendCall);
 		am.setSmsFrom(this.smsFrom);
 		am.setSmsTo(this.smsTo);
+		am.setCallUrlBase(this.urlBase);
 		return am;
 	}
 }

@@ -14,6 +14,10 @@ public class AntikytheraMechanismCLI {
 	
 	public static void main(final String args[]){
 		AntikytheraMechanismCLI cli = new AntikytheraMechanismCLI();
+		if(args.length == 0){
+			System.err.println("Usage: java " + AntikytheraMechanismCLI.class + " <login|trafficCheck|notify>");
+			System.exit(1);
+		}
 		cli.runAntikytheraMechanism(args[0]);
 		System.exit(0);
 	}
@@ -30,10 +34,18 @@ public class AntikytheraMechanismCLI {
 	
 	public void runAntikytheraMechanism(final String type){
 		AntikytheraMechanism am = context.getBean(AntikytheraMechanism.class);
-		if("login".equalsIgnoreCase(type)){
-			am.commencementOfTheDawn();
-		}else if("trafficCheck".equalsIgnoreCase(type)){
-			am.trafficUpdatesWeekday();
+		switch(type){
+			case "login":
+				am.commencementOfTheDawn();
+				break;
+			case "trafficCheck":
+				am.trafficUpdatesWeekday();
+				break;
+			case "notify":
+				am.remindUsers();
+				break;
+			default:
+				logger.info("unknown option " + type);
 		}
 	}
 	
