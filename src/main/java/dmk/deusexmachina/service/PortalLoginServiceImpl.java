@@ -2,6 +2,7 @@ package dmk.deusexmachina.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -48,13 +49,16 @@ public class PortalLoginServiceImpl implements PortalLoginService{
 		
 		int startIndex = html.indexOf("id=\'usernameSelect\'");
 		int endIndex = html.indexOf("</select", startIndex);
-		html = html.substring(startIndex, endIndex);
-		for(final String user: users){
-			boolean needsCheckin = html.contains("x " + user);
+		final String scopedHtml = html.substring(startIndex, endIndex);
+
+		Arrays.stream(users).forEach( user -> {
+			logger.trace("log in state for " + user);
+			boolean needsCheckin = scopedHtml.contains("x " + user);
 			if(needsCheckin){
+				logger.trace(user + " needs checked in");
 				badStatus.add(user);
 			}
-		}
+		});
 		return badStatus.toArray(new String[0]);
 	}
 	
